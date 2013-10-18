@@ -47,6 +47,9 @@
     <Compile Include="CopyConfig.cs" />
     <Compile Include="Helpers\AuthorizationHeader.cs" />
     <Compile Include="ICopyConfig.cs" />
+    <Compile Include="Managers\UserManager.cs" />
+    <Compile Include="Models\Email.cs" />
+    <Compile Include="Models\Storage.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scope.cs" />
@@ -55,9 +58,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Managers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

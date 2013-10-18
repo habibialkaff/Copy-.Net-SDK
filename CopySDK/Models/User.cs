@@ -10,7 +10,7 @@ namespace CopySDK.Models
     {
         public string Id { get; set; }
 
-        public object Storage { get; set; }
+        public Storage Storage { get; set; }
 
         public string FirstName { get; set; }
 
@@ -22,6 +22,6 @@ namespace CopySDK.Models
 
         public string Email { get; set; }
 
-        public object Emails { get; set; }
+        public Email[] Emails { get; set; }
     }
 }
