@@ -59,6 +59,23 @@ namespace CopySDK.Helper
             return EncodeRequestParameters();
         }
 
+        public static string CreateForREST(string consumerKey, string consumerSecret, string token, string tokenSecret, string method)
+        {
+            oauth_consumer_secret = consumerSecret;
+            oauth_token_secret = tokenSecret;
+
+            parameter.Remove("oauth_callback");
+            parameter.Remove("oauth_verifier");
+
+            parameter["oauth_consumer_key"] = consumerKey;
+            parameter["oauth_nonce"] = GenerateNonce();
+            parameter["oauth_timestamp"] = GenerateTimeStamp();
+            parameter["oauth_signature"] = GenerateSignature(URL.RequestToken, method);
+            parameter["oauth_token"] = token;
+
+            return EncodeRequestParameters();
+        }
+
         /// <summary>
         /// Formats the list of request parameters into string a according
         /// to the requirements of oauth. The resulting string could be used

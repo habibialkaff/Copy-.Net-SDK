@@ -42,18 +42,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\OAuth.cs" />
-    <Compile Include="Authentication\OAuthResponse.cs" />
+    <Compile Include="Authentications\OAuthSession.cs" />
+    <Compile Include="CopyClient.cs" />
     <Compile Include="CopyConfig.cs" />
-    <Compile Include="Helper\AuthorizationHeader.cs" />
+    <Compile Include="Helpers\AuthorizationHeader.cs" />
+    <Compile Include="ICopyConfig.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scope.cs" />
-    <Compile Include="Helper\URL.cs" />
+    <Compile Include="Helpers\URL.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Managers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
