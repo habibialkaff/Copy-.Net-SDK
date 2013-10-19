@@ -1,4 +1,4 @@
-Copy-C-Sharp
+Copy .NET SDK
 ============
 
 Unofficial Copy .NET SDK
