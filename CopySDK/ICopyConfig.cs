@@ -1,12 +1,10 @@
-﻿using CopySDK.Authentication;
-using System;
+﻿using System.Threading.Tasks;
+using CopySDK.Models;
 
 namespace CopySDK
 {
     public interface ICopyConfig
-    {
-        string ConsumerKey { get; set; }
-        string ConsumerSecret { get; set; }
-        OAuthSession GetRequestToken();
+    {        
+        Task<AuthToken> GetRequestToken();
     }
 }

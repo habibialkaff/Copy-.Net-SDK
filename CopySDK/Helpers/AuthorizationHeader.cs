@@ -39,7 +39,7 @@ namespace CopySDK.Helper
             parameter["oauth_timestamp"] = GenerateTimeStamp();
             parameter["oauth_signature"] = GenerateSignature(URL.RequestToken, "GET");
 
-            return EncodeRequestParameters();
+            return "OAuth " + EncodeRequestParameters();
         }
 
         public static string CreateForAccess(string consumerKey, string consumerSecret, string token, string tokenSecret, string verifier)
@@ -56,10 +56,10 @@ namespace CopySDK.Helper
             parameter["oauth_token"] = token;
             parameter["oauth_verifier"] = verifier;
 
-            return EncodeRequestParameters();
+            return "OAuth " + EncodeRequestParameters();
         }
 
-        public static string CreateForREST(string consumerKey, string consumerSecret, string token, string tokenSecret, string method)
+        public static string CreateForREST(string consumerKey, string consumerSecret, string token, string tokenSecret, string url, string method)
         {
             oauth_consumer_secret = consumerSecret;
             oauth_token_secret = tokenSecret;
@@ -70,10 +70,10 @@ namespace CopySDK.Helper
             parameter["oauth_consumer_key"] = consumerKey;
             parameter["oauth_nonce"] = GenerateNonce();
             parameter["oauth_timestamp"] = GenerateTimeStamp();
-            parameter["oauth_signature"] = GenerateSignature(URL.RequestToken, method);
+            parameter["oauth_signature"] = GenerateSignature(url, method);
             parameter["oauth_token"] = token;
 
-            return EncodeRequestParameters();
+            return "OAuth " + EncodeRequestParameters();
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace CopySDK.Helper
         private static string EncodeRequestParameters()
         {
             var sb = new System.Text.StringBuilder();
-            foreach (KeyValuePair<String, String> item in parameter.Where(x => x.Key != "oauth_signature"))
+            foreach (KeyValuePair<String, String> item in parameter)
             {
                 sb.AppendFormat("{0}=\"{1}\", ", item.Key, UrlEncode(item.Value));
             }
