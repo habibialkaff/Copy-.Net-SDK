@@ -7,4 +7,4 @@ Based on https://www.copy.com/developer/documentation
 
 Still In Progress
 
-Any feedback are appreciately welcomed
+Feedbacks are appreciately welcomed
