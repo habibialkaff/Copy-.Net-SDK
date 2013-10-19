@@ -24,7 +24,7 @@ namespace CopySDK.Managers
 
         public async Task<User> GetUser()
         {
-            string url = string.Format("{0}/{1}", URL.RESTRoot,"user");
+            string url = string.Format("{0}/{1}", URL.RESTRoot, "user");
 
             string authzHeader = AuthorizationHeader.CreateForREST(Config.ConsumerKey, Config.ConsumerSecret, AuthToken.Token, AuthToken.TokenSecret, url, "GET");
 
@@ -43,9 +43,29 @@ namespace CopySDK.Managers
             return JsonConvert.DeserializeObject<User>(executeAsync);
         }
 
-        public async Task<User> UpdateUser()
+        public async Task<User> UpdateUser(UserUpdate userUpdate)
         {
-            return null;
+            string url = string.Format("{0}/{1}", URL.RESTRoot, "user");
+
+            string authzHeader = AuthorizationHeader.CreateForREST(Config.ConsumerKey, Config.ConsumerSecret, AuthToken.Token, AuthToken.TokenSecret, url, "PUT");
+
+            string serializeObject = JsonConvert.SerializeObject(userUpdate);
+
+            HttpContent httpContent = new StringContent(serializeObject);
+
+            HttpRequestItem httpRequestItem = new HttpRequestItem()
+            {
+                URL = url,
+                HttpMethod = HttpMethod.Put,
+                AuthzHeader = authzHeader,
+                HttpContent = httpContent,
+                IsDataRequest = true
+            };
+
+            HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
+            string executeAsync = await httpRequestHandler.ExecuteAsync(httpRequestItem);
+
+            return JsonConvert.DeserializeObject<User>(executeAsync);
         }
     }
 }

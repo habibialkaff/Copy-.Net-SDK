@@ -2,19 +2,22 @@
 
 namespace CopySDK.Models
 {
-    public class User
+    public class UserUpdate
     {
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        [JsonProperty(PropertyName = "storage")]
-        public Storage Storage { get; set; }
-
         [JsonProperty(PropertyName = "fisrt_name")]
         public string FirstName { get; set; }
 
         [JsonProperty(PropertyName = "last_name")]
         public string LastName { get; set; }
+    }
+
+    public class User : UserUpdate
+    {
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "storage")]
+        public Storage Storage { get; set; }        
 
         [JsonProperty(PropertyName = "developer")]
         public string Developer { get; set; }

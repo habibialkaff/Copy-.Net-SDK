@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -174,10 +173,10 @@ namespace CopySDK.Helper
         public static string GenerateSignature(string uri, string method)
         {
             var signatureBase = GetSignatureBase(uri, method);
-            HashAlgorithm hashAlgorithm = GetHash();
+            OAuthSignature oAuthSignature = GetHash();
 
-            byte[] dataBuffer = System.Text.Encoding.ASCII.GetBytes(signatureBase);
-            byte[] hashBytes = hashAlgorithm.ComputeHash(dataBuffer);
+            byte[] dataBuffer = Encoding.Unicode.GetBytes(signatureBase);
+            byte[] hashBytes = oAuthSignature.ComputeHash(dataBuffer);
 
             return Convert.ToBase64String(hashBytes);
         }
@@ -221,15 +220,14 @@ namespace CopySDK.Helper
 
 
 
-        private static HashAlgorithm GetHash()
+        private static OAuthSignature GetHash()
         {
             string keystring = string.Format("{0}&{1}", UrlEncode(oauth_consumer_secret), UrlEncode(oauth_token_secret));
             //Tracing.Trace("keystring: '{0}'", keystring);
-            var hmacsha1 = new HMACSHA1
+            return new OAuthSignature
             {
-                Key = System.Text.Encoding.ASCII.GetBytes(keystring)
+                Key = Encoding.Unicode.GetBytes(keystring)
             };
-            return hmacsha1;
         }
 
         /// <summary>
