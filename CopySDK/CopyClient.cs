@@ -35,7 +35,7 @@ namespace CopySDK
 
             HttpRequestItem httpRequestItem = new HttpRequestItem()
             {
-                URL = url,
+                URL = URL.AccessToken,
                 HttpMethod = HttpMethod.Get,
                 AuthzHeader = authzHeader,
                 HttpContent = null,
@@ -49,11 +49,18 @@ namespace CopySDK
             Dictionary<string, string> parameters = kvpairs.Select(pair => pair.Split('='))
                                                         .ToDictionary(kv => kv[0], kv => kv[1]);
 
-            return new AuthToken()
+            if (parameters.ContainsKey("oauth_error_message"))
             {
-                Token = parameters["oauth_token"],
-                TokenSecret = parameters["oauth_token_secret"]
-            };
+                return null;
+            }
+            else
+            {
+                return new AuthToken()
+                {
+                    Token = parameters["oauth_token"],
+                    TokenSecret = parameters["oauth_token_secret"]
+                };
+            }
         }
     }
 }

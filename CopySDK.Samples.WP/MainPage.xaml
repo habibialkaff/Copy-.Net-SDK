@@ -48,10 +48,16 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1">
-            <local:OAuth2Sample x:Name="Oauth" Visibility="Visible" Margin="0,0,0,111"/>
-
-            <Button Content="test" Margin="0,496,0,0" Click="ButtonBase_OnClick" />
-            <TextBlock x:Name="UserDetails" Visibility="Collapsed" Text="empty"/>
+            <local:OAuth2Sample x:Name="Oauth" Visibility="Collapsed"/>
+            <StackPanel x:Name="UserDetails" Visibility="Collapsed">
+                <TextBlock Name="UserText" Text="empty" Margin="0,0,0,111"/>
+                <TextBlock TextWrapping="Wrap" Text="FirstName" Margin="10,0,0,0"/>
+                <TextBox Name="FirstName" />
+                <TextBlock TextWrapping="Wrap" Text="LastName" Margin="10,0,0,0"/>
+                <TextBox Name="LastName" />
+                <Button Content="Update" Click="UpdateButton_Click"/>
+            </StackPanel>
+            <Button Name="AuthenticateBtn" Content="Authenticate" Margin="0,496,0,0" Click="ButtonBase_OnClick" />
 
         </Grid>
 

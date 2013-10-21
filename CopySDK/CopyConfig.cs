@@ -42,9 +42,17 @@ namespace CopySDK
 
         public async Task<AuthToken> GetRequestToken()
         {
-            string serializedScope = JsonConvert.SerializeObject(Scope);
+            string url;
+            if (Scope != null)
+            {
+                string serializedScope = JsonConvert.SerializeObject(Scope);
 
-            string url = string.Format("{0}?scope={1}", URL.RequestToken, WebUtility.UrlEncode(serializedScope));
+                url = string.Format("{0}?scope={1}", URL.RequestToken, WebUtility.UrlEncode(serializedScope));
+            }
+            else
+            {
+                url = URL.RequestToken;
+            }
 
             string authzHeader = AuthorizationHeader.CreateForRequest(CallbackURL, Config.ConsumerKey, Config.ConsumerSecret, url);            
 

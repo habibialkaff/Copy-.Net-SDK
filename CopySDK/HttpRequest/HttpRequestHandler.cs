@@ -29,23 +29,19 @@ namespace CopySDK.HttpRequest
                 Content = httpRequestItem.HttpContent
             };
 
-            httpRequest.Headers.Add("Authorization", httpRequestItem.AuthzHeader);            
+            httpRequest.Headers.Add("Authorization", httpRequestItem.AuthzHeader);
 
             if (httpRequestItem.IsDataRequest)
             {
                 httpRequest.Headers.Add("X-Api-Version", "1");
                 httpRequest.Headers.Add("Accept", "application/json");
-            }                        
+            }
 
             HttpResponseMessage httpResponse =
                 await _client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead);
 
-            if (httpResponse.StatusCode == HttpStatusCode.OK)
-            {
-                return await httpResponse.Content.ReadAsStringAsync();
-            }
+            return await httpResponse.Content.ReadAsStringAsync();
 
-            return null;
         }
     }
 }

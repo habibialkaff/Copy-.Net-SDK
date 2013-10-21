@@ -9,31 +9,33 @@ namespace CopySDK.Helper
     public static class AuthorizationHeader
     {
         private static readonly DateTime _epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-        private static readonly Dictionary<string, string> parameters = new Dictionary<string, string>()
-        {
-            {"oauth_callback",""},
-            {"oauth_consumer_key",""},
-            {"oauth_nonce",""},
-            {"oauth_signature",""},
-            {"oauth_signature_method","HMAC-SHA1"},            
-            {"oauth_timestamp",""},
-            {"oauth_version","1.0"},            
-            {"oauth_verifier",""},
-            {"oauth_token",""},
-        };
+        private static Dictionary<string, string> parameters; //TODO: Fix, cannot initialized at the top. The ordering is messed up
 
         private static string oauth_consumer_secret { get; set; }
         private static string oauth_token_secret { get; set; }
 
         public static string CreateForRequest(string callbackURL, string consumerKey, string consumerSecret, string url)
         {
+            parameters = new Dictionary<string, string>()
+            {
+                {"oauth_callback",""},
+                {"oauth_consumer_key",""},
+                {"oauth_nonce",""},
+                {"oauth_signature",""},
+                {"oauth_signature_method","HMAC-SHA1"},            
+                {"oauth_timestamp",""},
+                {"oauth_token",""},
+                {"oauth_verifier",""},
+                {"oauth_version","1.0"},                        
+            };
+
             oauth_consumer_secret = consumerSecret;
 
             parameters.Remove("oauth_token");
             parameters.Remove("oauth_verifier");
 
             parameters["oauth_callback"] = callbackURL;
-            parameters["oauth_consumer_key"] = consumerKey;            
+            parameters["oauth_consumer_key"] = consumerKey;
             parameters["oauth_nonce"] = GenerateNonce();
             parameters["oauth_timestamp"] = GenerateTimeStamp();
             parameters["oauth_signature"] = GenerateSignature(url, "GET");
@@ -43,6 +45,19 @@ namespace CopySDK.Helper
 
         public static string CreateForAccess(string consumerKey, string consumerSecret, string token, string tokenSecret, string verifier)
         {
+            parameters = new Dictionary<string, string>()
+            {
+                {"oauth_callback",""},
+                {"oauth_consumer_key",""},
+                {"oauth_nonce",""},
+                {"oauth_signature",""},
+                {"oauth_signature_method","HMAC-SHA1"},            
+                {"oauth_timestamp",""},
+                {"oauth_token",""},
+                {"oauth_verifier",""},
+                {"oauth_version","1.0"},                        
+            };
+
             oauth_consumer_secret = consumerSecret;
             oauth_token_secret = tokenSecret;
 
@@ -51,15 +66,28 @@ namespace CopySDK.Helper
             parameters["oauth_consumer_key"] = consumerKey;
             parameters["oauth_nonce"] = GenerateNonce();
             parameters["oauth_timestamp"] = GenerateTimeStamp();
-            parameters["oauth_signature"] = GenerateSignature(URL.AccessToken, "GET");
             parameters["oauth_token"] = token;
             parameters["oauth_verifier"] = verifier;
+            parameters["oauth_signature"] = GenerateSignature(URL.AccessToken, "GET");
 
             return "OAuth " + EncodeRequestParameters();
         }
 
         public static string CreateForREST(string consumerKey, string consumerSecret, string token, string tokenSecret, string url, string method)
         {
+            parameters = new Dictionary<string, string>()
+            {
+                {"oauth_callback",""},
+                {"oauth_consumer_key",""},
+                {"oauth_nonce",""},
+                {"oauth_signature",""},
+                {"oauth_signature_method","HMAC-SHA1"},            
+                {"oauth_timestamp",""},
+                {"oauth_token",""},
+                {"oauth_verifier",""},
+                {"oauth_version","1.0"},                        
+            };
+
             oauth_consumer_secret = consumerSecret;
             oauth_token_secret = tokenSecret;
 
@@ -69,8 +97,8 @@ namespace CopySDK.Helper
             parameters["oauth_consumer_key"] = consumerKey;
             parameters["oauth_nonce"] = GenerateNonce();
             parameters["oauth_timestamp"] = GenerateTimeStamp();
-            parameters["oauth_signature"] = GenerateSignature(url, method);
             parameters["oauth_token"] = token;
+            parameters["oauth_signature"] = GenerateSignature(url, method);
 
             return "OAuth " + EncodeRequestParameters();
         }
@@ -116,6 +144,8 @@ namespace CopySDK.Helper
         {
             TimeSpan ts = DateTime.UtcNow - _epoch;
             return Convert.ToInt64(ts.TotalSeconds).ToString();
+
+            //return "1382344140";
         }
 
         /// <summary>
@@ -147,27 +177,28 @@ namespace CopySDK.Helper
         /// <returns>the nonce</returns>
         private static string GenerateNonce()
         {
-            Random random = new Random();
+            //Random random = new Random();
 
-            var sb = new StringBuilder();
-            for (int i = 0; i < 8; i++)
-            {
-                int g = random.Next(3);
-                switch (g)
-                {
-                    case 0:
-                        // lowercase alpha
-                        sb.Append((char)(random.Next(26) + 97), 1);
-                        break;
-                    default:
-                        // numeric digits
-                        sb.Append((char)(random.Next(10) + 48), 1);
-                        break;
-                }
-            }
-            return sb.ToString();
+            //var sb = new StringBuilder();
+            //for (int i = 0; i < 8; i++)
+            //{
+            //    int g = random.Next(3);
+            //    switch (g)
+            //    {
+            //        case 0:
+            //            // lowercase alpha
+            //            sb.Append((char)(random.Next(26) + 97), 1);
+            //            break;
+            //        default:
+            //            // numeric digits
+            //            sb.Append((char)(random.Next(10) + 48), 1);
+            //            break;
+            //    }
+            //}
+            //return sb.ToString();            
 
-            //return Guid.NewGuid().ToString();
+            //return "44b95d54-27ae-4de0-b267-8a2a86d418a3";
+            return Guid.NewGuid().ToString();
         }
 
         public static string GenerateSignature(string uri, string method)
@@ -209,8 +240,16 @@ namespace CopySDK.Helper
             var sb1 = new StringBuilder();
             foreach (KeyValuePair<String, String> item in parameters.Where(x => x.Key != "oauth_signature"))
             {
+                string itemValue = item.Value;
+
+                // Specific Fix : double encode Callback
+                if (item.Key == "oauth_callback")
+                {
+                    itemValue = UrlEncode(item.Value);
+                }
+
                 // even "empty" params need to be encoded this way.
-                sb1.AppendFormat("{0}={1}&", item.Key, item.Value);
+                sb1.AppendFormat("{0}={1}&", item.Key, itemValue);
             }
 
             foreach (KeyValuePair<String, String> item in queryParameters)

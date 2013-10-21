@@ -65,6 +65,7 @@ namespace CopySDK.Managers
             HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
             string executeAsync = await httpRequestHandler.ExecuteAsync(httpRequestItem);
 
+            //TODO : Investigate
             return JsonConvert.DeserializeObject<User>(executeAsync);
         }
     }

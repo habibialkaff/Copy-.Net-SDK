@@ -4,7 +4,7 @@ namespace CopySDK.Models
 {
     public class UserUpdate
     {
-        [JsonProperty(PropertyName = "fisrt_name")]
+        [JsonProperty(PropertyName = "first_name")]
         public string FirstName { get; set; }
 
         [JsonProperty(PropertyName = "last_name")]

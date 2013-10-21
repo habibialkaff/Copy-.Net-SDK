@@ -454,6 +454,8 @@ namespace CopySDK.Authentication
             NewRequest();
             _params["verifier"] = pin;
 
+            _params.Remove("callback");
+
             var authzHeader = GetAuthorizationHeader(uri, method);
 
             // prepare the token request
@@ -595,6 +597,11 @@ namespace CopySDK.Authentication
                     !p1.Key.EndsWith("_secret") &&
                     !p1.Key.EndsWith("signature"))
                     p.Add("oauth_" + p1.Key, p1.Value);
+            }
+
+            if (p.ContainsKey("oauth_callback"))
+            {
+                p["oauth_callback"] = UrlEncode(p["oauth_callback"]);
             }
 
             // concat+format all those params

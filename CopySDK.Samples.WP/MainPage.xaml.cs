@@ -22,6 +22,7 @@ namespace CopySDK.Samples.WP
         private readonly IsolatedStorageSettings _appSettings = IsolatedStorageSettings.ApplicationSettings;
 
         private CopyConfig copyConfig;
+        private CopyClient copyClient;
         private AuthToken authToken;
 
         // Constructor
@@ -29,15 +30,17 @@ namespace CopySDK.Samples.WP
         {
             InitializeComponent();
 
-            
+
 
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
         }
 
-        private void AfterAuthenticate(CopyClient copyClient)
+        private async void AfterAuthenticate(CopyClient copyClient)
         {
+            User user = await copyClient.UserManager.GetUser();
 
+            UserText.Text = string.Format("{0} {1} {2}", user.FirstName, user.LastName, user.Email);
 
             Oauth.Visibility = Visibility.Collapsed;
             UserDetails.Visibility = Visibility.Visible;
@@ -72,7 +75,7 @@ namespace CopySDK.Samples.WP
                     OAuth2Sample auth = s as OAuth2Sample;
                     if (auth != null)
                     {
-                        CopyClient copyClient = new CopyClient(copyConfig.Config, authToken);
+                        copyClient = new CopyClient(copyConfig.Config, authToken);
 
                         AuthToken accessToken = await copyClient.GetAccessToken(auth.VerifierCode);
 
@@ -91,12 +94,26 @@ namespace CopySDK.Samples.WP
                     }
                 };
 
-                copyConfig = new CopyConfig("foo", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
+                copyConfig = new CopyConfig("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
 
-                AuthToken requestToken = await copyConfig.GetRequestToken();                
+                authToken = await copyConfig.GetRequestToken();
+
+                Oauth.Visibility = Visibility.Visible;
+                AuthenticateBtn.Visibility = Visibility.Collapsed;
 
                 Oauth.GetVerifierCode(copyConfig.AuthCodeUri, new Uri(copyConfig.CallbackURL));
             }
+        }
+
+        private async void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            UserUpdate userUpdate = new UserUpdate()
+            {
+                FirstName = FirstName.Text,
+                LastName = LastName.Text,
+            };
+
+            await copyClient.UserManager.UpdateUser(userUpdate);
         }
     }
 }
