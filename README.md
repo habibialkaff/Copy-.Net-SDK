@@ -7,4 +7,9 @@ Based on https://www.copy.com/developer/documentation
 
 Still In Progress
 
-Feedbacks are appreciately welcomed
+Feedbacks / Collaborators are appreciately welcomed.
+
+
+Owner:
+Habibi
+abdurrachman.habibi@gmail.com
