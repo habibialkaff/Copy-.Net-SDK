@@ -9,15 +9,15 @@ namespace CopySDK.Helper
     public static class AuthorizationHeader
     {
         private static readonly DateTime _epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-        private static readonly Dictionary<string, string> parameter = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> parameters = new Dictionary<string, string>()
         {
             {"oauth_callback",""},
             {"oauth_consumer_key",""},
-            {"oauth_signature_method","HMAC-SHA1"},
             {"oauth_nonce",""},
-            {"oauth_timestamp",""},
-            {"oauth_version","1.0"},
             {"oauth_signature",""},
+            {"oauth_signature_method","HMAC-SHA1"},            
+            {"oauth_timestamp",""},
+            {"oauth_version","1.0"},            
             {"oauth_verifier",""},
             {"oauth_token",""},
         };
@@ -25,18 +25,18 @@ namespace CopySDK.Helper
         private static string oauth_consumer_secret { get; set; }
         private static string oauth_token_secret { get; set; }
 
-        public static string CreateForRequest(string callbackURL, string consumerKey, string consumerSecret)
+        public static string CreateForRequest(string callbackURL, string consumerKey, string consumerSecret, string url)
         {
             oauth_consumer_secret = consumerSecret;
 
-            parameter.Remove("oauth_token");
-            parameter.Remove("oauth_verifier");
+            parameters.Remove("oauth_token");
+            parameters.Remove("oauth_verifier");
 
-            parameter["oauth_callback"] = callbackURL;
-            parameter["oauth_consumer_key"] = consumerKey;
-            parameter["oauth_nonce"] = GenerateNonce();
-            parameter["oauth_timestamp"] = GenerateTimeStamp();
-            parameter["oauth_signature"] = GenerateSignature(URL.RequestToken, "GET");
+            parameters["oauth_callback"] = callbackURL;
+            parameters["oauth_consumer_key"] = consumerKey;            
+            parameters["oauth_nonce"] = GenerateNonce();
+            parameters["oauth_timestamp"] = GenerateTimeStamp();
+            parameters["oauth_signature"] = GenerateSignature(url, "GET");
 
             return "OAuth " + EncodeRequestParameters();
         }
@@ -46,14 +46,14 @@ namespace CopySDK.Helper
             oauth_consumer_secret = consumerSecret;
             oauth_token_secret = tokenSecret;
 
-            parameter.Remove("oauth_callback");
+            parameters.Remove("oauth_callback");
 
-            parameter["oauth_consumer_key"] = consumerKey;
-            parameter["oauth_nonce"] = GenerateNonce();
-            parameter["oauth_timestamp"] = GenerateTimeStamp();
-            parameter["oauth_signature"] = GenerateSignature(URL.AccessToken, "GET");
-            parameter["oauth_token"] = token;
-            parameter["oauth_verifier"] = verifier;
+            parameters["oauth_consumer_key"] = consumerKey;
+            parameters["oauth_nonce"] = GenerateNonce();
+            parameters["oauth_timestamp"] = GenerateTimeStamp();
+            parameters["oauth_signature"] = GenerateSignature(URL.AccessToken, "GET");
+            parameters["oauth_token"] = token;
+            parameters["oauth_verifier"] = verifier;
 
             return "OAuth " + EncodeRequestParameters();
         }
@@ -63,14 +63,14 @@ namespace CopySDK.Helper
             oauth_consumer_secret = consumerSecret;
             oauth_token_secret = tokenSecret;
 
-            parameter.Remove("oauth_callback");
-            parameter.Remove("oauth_verifier");
+            parameters.Remove("oauth_callback");
+            parameters.Remove("oauth_verifier");
 
-            parameter["oauth_consumer_key"] = consumerKey;
-            parameter["oauth_nonce"] = GenerateNonce();
-            parameter["oauth_timestamp"] = GenerateTimeStamp();
-            parameter["oauth_signature"] = GenerateSignature(url, method);
-            parameter["oauth_token"] = token;
+            parameters["oauth_consumer_key"] = consumerKey;
+            parameters["oauth_nonce"] = GenerateNonce();
+            parameters["oauth_timestamp"] = GenerateTimeStamp();
+            parameters["oauth_signature"] = GenerateSignature(url, method);
+            parameters["oauth_token"] = token;
 
             return "OAuth " + EncodeRequestParameters();
         }
@@ -99,7 +99,7 @@ namespace CopySDK.Helper
         private static string EncodeRequestParameters()
         {
             var sb = new System.Text.StringBuilder();
-            foreach (KeyValuePair<String, String> item in parameter)
+            foreach (KeyValuePair<String, String> item in parameters)
             {
                 sb.AppendFormat("{0}=\"{1}\", ", item.Key, UrlEncode(item.Value));
             }
@@ -147,27 +147,27 @@ namespace CopySDK.Helper
         /// <returns>the nonce</returns>
         private static string GenerateNonce()
         {
-            //Random random = new Random();
+            Random random = new Random();
 
-            //var sb = new StringBuilder();
-            //for (int i = 0; i < 8; i++)
-            //{
-            //    int g = random.Next(3);
-            //    switch (g)
-            //    {
-            //        case 0:
-            //            // lowercase alpha
-            //            sb.Append((char)(random.Next(26) + 97), 1);
-            //            break;
-            //        default:
-            //            // numeric digits
-            //            sb.Append((char)(random.Next(10) + 48), 1);
-            //            break;
-            //    }
-            //}
-            //return sb.ToString();
+            var sb = new StringBuilder();
+            for (int i = 0; i < 8; i++)
+            {
+                int g = random.Next(3);
+                switch (g)
+                {
+                    case 0:
+                        // lowercase alpha
+                        sb.Append((char)(random.Next(26) + 97), 1);
+                        break;
+                    default:
+                        // numeric digits
+                        sb.Append((char)(random.Next(10) + 48), 1);
+                        break;
+                }
+            }
+            return sb.ToString();
 
-            return Guid.NewGuid().ToString();
+            //return Guid.NewGuid().ToString();
         }
 
         public static string GenerateSignature(string uri, string method)
@@ -175,7 +175,7 @@ namespace CopySDK.Helper
             var signatureBase = GetSignatureBase(uri, method);
             OAuthSignature oAuthSignature = GetHash();
 
-            byte[] dataBuffer = Encoding.Unicode.GetBytes(signatureBase);
+            byte[] dataBuffer = Encoding.UTF8.GetBytes(signatureBase);
             byte[] hashBytes = oAuthSignature.ComputeHash(dataBuffer);
 
             return Convert.ToBase64String(hashBytes);
@@ -203,9 +203,17 @@ namespace CopySDK.Helper
                 .Append(UrlEncode(normUrl))
                 .Append('&');
 
+            Dictionary<string, string> queryParameters = ExtractQueryParameters(uri.Query);
+
             // concat+format all those params except oauth_signature
-            var sb1 = new System.Text.StringBuilder();
-            foreach (KeyValuePair<String, String> item in parameter.Where(x => x.Key != "oauth_signature"))
+            var sb1 = new StringBuilder();
+            foreach (KeyValuePair<String, String> item in parameters.Where(x => x.Key != "oauth_signature"))
+            {
+                // even "empty" params need to be encoded this way.
+                sb1.AppendFormat("{0}={1}&", item.Key, item.Value);
+            }
+
+            foreach (KeyValuePair<String, String> item in queryParameters)
             {
                 // even "empty" params need to be encoded this way.
                 sb1.AppendFormat("{0}={1}&", item.Key, item.Value);
@@ -222,11 +230,11 @@ namespace CopySDK.Helper
 
         private static OAuthSignature GetHash()
         {
-            string keystring = string.Format("{0}&{1}", UrlEncode(oauth_consumer_secret), UrlEncode(oauth_token_secret));
+            string keystring = string.Format("{0}&{1}", UrlEncode(oauth_consumer_secret), UrlEncode(oauth_token_secret ?? string.Empty));
             //Tracing.Trace("keystring: '{0}'", keystring);
             return new OAuthSignature
             {
-                Key = Encoding.Unicode.GetBytes(keystring)
+                Key = Encoding.UTF8.GetBytes(keystring)
             };
         }
 
@@ -254,6 +262,52 @@ namespace CopySDK.Helper
                     result.Append('%' + String.Format("{0:X2}", (int)symbol));
             }
             return result.ToString();
+        }
+
+        /// <summary>
+        /// Internal function to extract from a URL all query string
+        /// parameters that are not related to oauth - in other words all
+        /// parameters not begining with "oauth_".
+        /// </summary>
+        ///
+        /// <remarks>
+        ///   <para>
+        ///     For example, given a url like http://foo?a=7&guff, the
+        ///     returned value will be a Dictionary of string-to-string
+        ///     relations.  There will be 2 entries in the Dictionary: "a"=>7,
+        ///     and "guff"=>"".
+        ///   </para>
+        /// </remarks>
+        ///
+        /// <param name="queryString">The query string part of the Url</param>
+        ///
+        /// <returns>A Dictionary containing the set of
+        /// parameter names and associated values</returns>
+        private static Dictionary<String, String> ExtractQueryParameters(string queryString)
+        {
+            if (queryString.StartsWith("?"))
+                queryString = queryString.Remove(0, 1);
+
+            var result = new Dictionary<String, String>();
+
+            if (string.IsNullOrEmpty(queryString))
+                return result;
+
+            foreach (string s in queryString.Split('&'))
+            {
+                if (!string.IsNullOrEmpty(s) && !s.StartsWith("oauth_"))
+                {
+                    if (s.IndexOf('=') > -1)
+                    {
+                        string[] temp = s.Split('=');
+                        result.Add(temp[0], temp[1]);
+                    }
+                    else
+                        result.Add(s, string.Empty);
+                }
+            }
+
+            return result;
         }
     }
 }

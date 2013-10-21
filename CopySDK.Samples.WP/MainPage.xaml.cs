@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Box.V2.Samples.WP;
+using CopySDK.Helper;
+using CopySDK.Managers;
+using CopySDK.Models;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using CopySDK.Samples.WP.Resources;
@@ -16,23 +21,26 @@ namespace CopySDK.Samples.WP
     {
         private readonly IsolatedStorageSettings _appSettings = IsolatedStorageSettings.ApplicationSettings;
 
+        private CopyConfig copyConfig;
+        private AuthToken authToken;
+
         // Constructor
         public MainPage()
         {
             InitializeComponent();
 
-            if (_appSettings.Contains("authenticated"))
-            {
-                Oauth.Visibility = Visibility.Collapsed;
-                UserDetails.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                
-            }
+            
 
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
+        }
+
+        private void AfterAuthenticate(CopyClient copyClient)
+        {
+
+
+            Oauth.Visibility = Visibility.Collapsed;
+            UserDetails.Visibility = Visibility.Visible;
         }
 
         // Sample code for building a localized ApplicationBar
@@ -50,5 +58,45 @@ namespace CopySDK.Samples.WP
         //    ApplicationBarMenuItem appBarMenuItem = new ApplicationBarMenuItem(AppResources.AppBarMenuItemText);
         //    ApplicationBar.MenuItems.Add(appBarMenuItem);
         //}
+        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_appSettings.Contains("authenticated"))
+            {
+                Oauth.Visibility = Visibility.Collapsed;
+                UserDetails.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Oauth.VerifiedCodeReceived += async (s, ec) =>
+                {
+                    OAuth2Sample auth = s as OAuth2Sample;
+                    if (auth != null)
+                    {
+                        CopyClient copyClient = new CopyClient(copyConfig.Config, authToken);
+
+                        AuthToken accessToken = await copyClient.GetAccessToken(auth.VerifierCode);
+
+                        copyClient.UserManager = new UserManager(copyConfig.Config, accessToken);
+
+                        Dispatcher.BeginInvoke(new Action<CopyClient>(AfterAuthenticate), copyClient);
+                    }
+                };
+
+                Scope scope = new Scope()
+                {
+                    Profile = new ProfilePermission()
+                    {
+                        Read = true,
+                        Write = true
+                    }
+                };
+
+                copyConfig = new CopyConfig("foo", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
+
+                AuthToken requestToken = await copyConfig.GetRequestToken();                
+
+                Oauth.GetVerifierCode(copyConfig.AuthCodeUri, new Uri(copyConfig.CallbackURL));
+            }
+        }
     }
 }

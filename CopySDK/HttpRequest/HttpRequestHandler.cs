@@ -17,7 +17,7 @@ namespace CopySDK.HttpRequest
         public HttpRequestHandler()
         {
             _handler = new HttpClientHandler();
-            _client = new HttpClient(_handler);
+            _client = new HttpClient();
         }
 
         public async Task<string> ExecuteAsync(HttpRequestItem httpRequestItem)
@@ -26,16 +26,16 @@ namespace CopySDK.HttpRequest
             {
                 RequestUri = new Uri(httpRequestItem.URL),
                 Method = httpRequestItem.HttpMethod,
-                Content = httpRequestItem.HttpContent ?? new StringContent("")
+                Content = httpRequestItem.HttpContent
             };
 
-            httpRequest.Headers.Add("Authorization", httpRequestItem.AuthzHeader);
+            httpRequest.Headers.Add("Authorization", httpRequestItem.AuthzHeader);            
 
             if (httpRequestItem.IsDataRequest)
             {
                 httpRequest.Headers.Add("X-Api-Version", "1");
                 httpRequest.Headers.Add("Accept", "application/json");
-            }
+            }                        
 
             HttpResponseMessage httpResponse =
                 await _client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead);

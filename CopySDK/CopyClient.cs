@@ -21,6 +21,12 @@ namespace CopySDK
 
         public UserManager UserManager { get; set; }
 
+        public CopyClient(Config config, AuthToken authToken)
+        {
+            Config = config;
+            AuthToken = authToken;            
+        }
+
         public async Task<AuthToken> GetAccessToken(string verifier)
         {
             string authzHeader = AuthorizationHeader.CreateForAccess(Config.ConsumerKey, Config.ConsumerSecret, AuthToken.Token, AuthToken.TokenSecret, verifier);

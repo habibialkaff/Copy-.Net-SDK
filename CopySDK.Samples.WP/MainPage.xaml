@@ -47,9 +47,12 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <local:OAuth2Sample x:Name="Oauth" Visibility="Visible" />
-            <TextBlock Name="UserDetails" Visibility="Collapsed"></TextBlock>
+        <Grid x:Name="ContentPanel" Grid.Row="1">
+            <local:OAuth2Sample x:Name="Oauth" Visibility="Visible" Margin="0,0,0,111"/>
+
+            <Button Content="test" Margin="0,496,0,0" Click="ButtonBase_OnClick" />
+            <TextBlock x:Name="UserDetails" Visibility="Collapsed" Text="empty"/>
+
         </Grid>
 
         <!--Uncomment to see an alignment grid to help ensure your controls are

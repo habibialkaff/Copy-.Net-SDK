@@ -4,8 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CopySDK.Helper;
-using CopySDK.HttpRequest;
 using CopySDK.Models;
 using Newtonsoft.Json;
 
@@ -60,22 +58,17 @@ namespace CopySDK
             HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
             string executeAsync = await httpRequestHandler.ExecuteAsync(httpRequestItem);
 
-            if (!string.IsNullOrEmpty(executeAsync))
+            string[] kvpairs = executeAsync.Split('&');
+            Dictionary<string, string> parameters = kvpairs.Select(pair => pair.Split('='))
+                                                        .ToDictionary(kv => kv[0], kv => kv[1]);
+
+            AuthCodeUri = new Uri(string.Format("{0}?oauth_token={1}", URL.Authorize, parameters["oauth_token"]));
+
+            return new AuthToken()
             {
-                string[] kvpairs = executeAsync.Split('&');
-                Dictionary<string, string> parameters = kvpairs.Select(pair => pair.Split('='))
-                                                               .ToDictionary(kv => kv[0], kv => kv[1]);
-
-                AuthCodeUri = new Uri(string.Format("{0}?oauth_token={1}", URL.Authorize, parameters["oauth_token"]));
-
-                return new AuthToken()
-                {
-                    Token = parameters["oauth_token"],
-                    TokenSecret = parameters["oauth_token_secret"]
-                };
-            }
-
-            return new AuthToken();
+                Token = parameters["oauth_token"],
+                TokenSecret = parameters["oauth_token_secret"]
+            };
         }
     }
 }
