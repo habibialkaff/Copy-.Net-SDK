@@ -5,6 +5,6 @@ namespace CopySDK
 {
     public interface ICopyConfig
     {        
-        Task<AuthToken> GetRequestToken();
+        Task<OAuthToken> GetRequestTokenAsync();
     }
 }

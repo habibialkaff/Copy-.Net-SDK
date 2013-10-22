@@ -19,6 +19,9 @@ namespace CopySDK
 
         public Uri AuthCodeUri { get; set; }
 
+        private string Token { get; set; }
+        private string TokenSecret { get; set; }
+
         //public CopyConfig(string consumerKey, string consumerSecret)
         //{
         //    Config = new Config()
@@ -40,7 +43,7 @@ namespace CopySDK
             };
         }
 
-        public async Task<AuthToken> GetRequestToken()
+        public async Task<OAuthToken> GetRequestTokenAsync()
         {
             string url;
             if (Scope != null)
@@ -54,7 +57,7 @@ namespace CopySDK
                 url = URL.RequestToken;
             }
 
-            string authzHeader = AuthorizationHeader.CreateForRequest(CallbackURL, Config.ConsumerKey, Config.ConsumerSecret, url);            
+            string authzHeader = AuthorizationHeader.CreateForRequest(CallbackURL, Config.ConsumerKey, Config.ConsumerSecret, url);
 
             HttpRequestItem httpRequestItem = new HttpRequestItem()
             {
@@ -74,16 +77,55 @@ namespace CopySDK
                 Dictionary<string, string> parameters = kvpairs.Select(pair => pair.Split('='))
                                                                .ToDictionary(kv => kv[0], kv => kv[1]);
 
-                AuthCodeUri = new Uri(string.Format("{0}?oauth_token={1}", URL.Authorize, parameters["oauth_token"]));
 
-                return new AuthToken()
+                Token = parameters["oauth_token"];
+                TokenSecret = parameters["oauth_token_secret"];
+                AuthCodeUri = new Uri(string.Format("{0}?oauth_token={1}", URL.Authorize, Token));
+
+                return new OAuthToken()
                 {
-                    Token = parameters["oauth_token"],
-                    TokenSecret = parameters["oauth_token_secret"]
+                    Token = Token,
+                    TokenSecret = TokenSecret
                 };
             }
 
-            return new AuthToken();
+            return new OAuthToken();
+        }
+
+        public async Task<CopyClient> GetAccessTokenAsync(string verifier)
+        {
+            string authzHeader = AuthorizationHeader.CreateForAccess(Config.ConsumerKey, Config.ConsumerSecret, Token, TokenSecret, verifier);
+
+            string url = string.Format(URL.AccessToken);
+
+            HttpRequestItem httpRequestItem = new HttpRequestItem()
+            {
+                URL = URL.AccessToken,
+                HttpMethod = HttpMethod.Get,
+                AuthzHeader = authzHeader,
+                HttpContent = null,
+                IsDataRequest = false
+            };
+
+            HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
+            string executeAsync = await httpRequestHandler.ExecuteAsync(httpRequestItem);
+
+            string[] kvpairs = executeAsync.Split('&');
+            Dictionary<string, string> parameters = kvpairs.Select(pair => pair.Split('='))
+                                                        .ToDictionary(kv => kv[0], kv => kv[1]);
+
+            if (parameters.ContainsKey("oauth_error_message"))
+            {
+                return null;
+            }
+            else
+            {
+                return new CopyClient(Config, new OAuthToken()
+                {
+                    Token = parameters["oauth_token"],
+                    TokenSecret = parameters["oauth_token_secret"]
+                });
+            }
         }
     }
 }

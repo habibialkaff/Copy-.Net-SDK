@@ -14,15 +14,15 @@ namespace CopySDK.Managers
     public class UserManager
     {
         public Config Config { get; set; }
-        public AuthToken AuthToken { get; set; }
+        public OAuthToken AuthToken { get; set; }
 
-        public UserManager(Config config, AuthToken authToken)
+        public UserManager(Config config, OAuthToken authToken)
         {
             Config = config;
             AuthToken = authToken;
         }
 
-        public async Task<User> GetUser()
+        public async Task<User> GetUserAsync()
         {
             string url = string.Format("{0}/{1}", URL.RESTRoot, "user");
 
@@ -43,7 +43,7 @@ namespace CopySDK.Managers
             return JsonConvert.DeserializeObject<User>(executeAsync);
         }
 
-        public async Task<User> UpdateUser(UserUpdate userUpdate)
+        public async Task UpdateUserAsync(UserUpdate userUpdate)
         {
             string url = string.Format("{0}/{1}", URL.RESTRoot, "user");
 
@@ -66,7 +66,7 @@ namespace CopySDK.Managers
             string executeAsync = await httpRequestHandler.ExecuteAsync(httpRequestItem);
 
             //TODO : Investigate
-            return JsonConvert.DeserializeObject<User>(executeAsync);
+            //return JsonConvert.DeserializeObject<User>(executeAsync);
         }
     }
 }

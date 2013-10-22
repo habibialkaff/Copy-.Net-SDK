@@ -2,7 +2,7 @@
 
 namespace CopySDK.Models
 {
-    public class AuthToken
+    public class OAuthToken
     {
         [JsonProperty(PropertyName="oauth_token")]
         public string Token { get; set; }

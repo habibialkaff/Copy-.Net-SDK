@@ -23,7 +23,7 @@ namespace CopySDK.Samples.WP
 
         private CopyConfig copyConfig;
         private CopyClient copyClient;
-        private AuthToken authToken;
+        private OAuthToken authToken;
 
         // Constructor
         public MainPage()
@@ -38,7 +38,7 @@ namespace CopySDK.Samples.WP
 
         private async void AfterAuthenticate(CopyClient copyClient)
         {
-            User user = await copyClient.UserManager.GetUser();
+            User user = await copyClient.UserManager.GetUserAsync();
 
             UserText.Text = string.Format("{0} {1} {2}", user.FirstName, user.LastName, user.Email);
 
@@ -74,12 +74,8 @@ namespace CopySDK.Samples.WP
                 {
                     OAuth2Sample auth = s as OAuth2Sample;
                     if (auth != null)
-                    {
-                        copyClient = new CopyClient(copyConfig.Config, authToken);
-
-                        AuthToken accessToken = await copyClient.GetAccessToken(auth.VerifierCode);
-
-                        copyClient.UserManager = new UserManager(copyConfig.Config, accessToken);
+                    {                        
+                        copyClient = await copyConfig.GetAccessTokenAsync(auth.VerifierCode);                        
 
                         Dispatcher.BeginInvoke(new Action<CopyClient>(AfterAuthenticate), copyClient);
                     }
@@ -96,7 +92,7 @@ namespace CopySDK.Samples.WP
 
                 copyConfig = new CopyConfig("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
 
-                authToken = await copyConfig.GetRequestToken();
+                authToken = await copyConfig.GetRequestTokenAsync();
 
                 Oauth.Visibility = Visibility.Visible;
                 AuthenticateBtn.Visibility = Visibility.Collapsed;
@@ -113,7 +109,7 @@ namespace CopySDK.Samples.WP
                 LastName = LastName.Text,
             };
 
-            await copyClient.UserManager.UpdateUser(userUpdate);
+            await copyClient.UserManager.UpdateUserAsync(userUpdate);
         }
     }
 }

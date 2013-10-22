@@ -32,25 +32,23 @@ namespace ConsoleApplication1
 
             CopyConfig copyConfig = new CopyConfig("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
 
-            Task<AuthToken> requestToken = copyConfig.GetRequestToken();
+            Task<OAuthToken> requestToken = copyConfig.GetRequestTokenAsync();
 
             Task.WhenAll(requestToken);
 
-            AuthToken authToken = requestToken.Result;
+            OAuthToken authToken = requestToken.Result;
 
             var url = string.Format("{0}?oauth_token={1}", URL.Authorize, authToken.Token);
 
             System.Diagnostics.Process.Start(url);
 
-            string verifier = "";
+            string verifier = "";            
 
-            CopyClient copyClient = new CopyClient(copyConfig.Config, authToken);
-
-            Task<AuthToken> accessToken = copyClient.GetAccessToken(verifier);
+            Task<CopyClient> copyClient = copyConfig.GetAccessTokenAsync(verifier);
 
             Task.WhenAll(requestToken);
 
-            AuthToken result = accessToken.Result;
+            OAuthToken result = copyClient.Result.AuthToken;
 
 
 
