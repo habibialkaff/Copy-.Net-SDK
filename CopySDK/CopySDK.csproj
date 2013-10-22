@@ -54,21 +54,13 @@
     <Compile Include="Models\UserEmail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scope.cs" />
-    <Compile Include="Signature\GeneralDigest.cs" />
-    <Compile Include="Signature\HMac.cs" />
-    <Compile Include="Signature\ICipherParameters.cs" />
-    <Compile Include="Signature\IDigest.cs" />
-    <Compile Include="Signature\IMac.cs" />
-    <Compile Include="Signature\KeyParameter.cs" />
-    <Compile Include="Signature\OAuthSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Signature\Pack.cs" />
-    <Compile Include="Signature\Sha1Digest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OAuthSignature">
+      <HintPath>..\packages\OAuthSignature.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.15\lib\portable-net40+sl4+win8+wp71\System.Net.Http.dll</HintPath>

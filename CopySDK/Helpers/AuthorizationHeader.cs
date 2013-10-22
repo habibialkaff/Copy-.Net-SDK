@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using CopySDK.Helper;
+using OAuthSignature;
 
-namespace CopySDK.Helper
+namespace CopySDK.Helpers
 {
     public static class AuthorizationHeader
     {
         private static readonly DateTime _epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
         private static Dictionary<string, string> parameters; //TODO: Fix, cannot initialized at the top. The ordering is messed up
 
-        private static string oauth_consumer_secret { get; set; }
-        private static string oauth_token_secret { get; set; }
+        private static string OauthConsumerSecret { get; set; }
+        private static string OauthTokenSecret { get; set; }
 
         public static string CreateForRequest(string callbackURL, string consumerKey, string consumerSecret, string url)
         {
@@ -29,7 +30,7 @@ namespace CopySDK.Helper
                 {"oauth_version","1.0"},                        
             };
 
-            oauth_consumer_secret = consumerSecret;
+            OauthConsumerSecret = consumerSecret;
 
             parameters.Remove("oauth_token");
             parameters.Remove("oauth_verifier");
@@ -58,8 +59,8 @@ namespace CopySDK.Helper
                 {"oauth_version","1.0"},                        
             };
 
-            oauth_consumer_secret = consumerSecret;
-            oauth_token_secret = tokenSecret;
+            OauthConsumerSecret = consumerSecret;
+            OauthTokenSecret = tokenSecret;
 
             parameters.Remove("oauth_callback");
 
@@ -88,8 +89,8 @@ namespace CopySDK.Helper
                 {"oauth_version","1.0"},                        
             };
 
-            oauth_consumer_secret = consumerSecret;
-            oauth_token_secret = tokenSecret;
+            OauthConsumerSecret = consumerSecret;
+            OauthTokenSecret = tokenSecret;
 
             parameters.Remove("oauth_callback");
             parameters.Remove("oauth_verifier");
@@ -204,7 +205,7 @@ namespace CopySDK.Helper
         public static string GenerateSignature(string uri, string method)
         {
             var signatureBase = GetSignatureBase(uri, method);
-            OAuthSignature oAuthSignature = GetHash();
+            HMacSha1 oAuthSignature = GetHash();
 
             byte[] dataBuffer = Encoding.UTF8.GetBytes(signatureBase);
             byte[] hashBytes = oAuthSignature.ComputeHash(dataBuffer);
@@ -267,11 +268,11 @@ namespace CopySDK.Helper
 
 
 
-        private static OAuthSignature GetHash()
+        private static HMacSha1 GetHash()
         {
-            string keystring = string.Format("{0}&{1}", UrlEncode(oauth_consumer_secret), UrlEncode(oauth_token_secret ?? string.Empty));
+            string keystring = string.Format("{0}&{1}", UrlEncode(OauthConsumerSecret), UrlEncode(OauthTokenSecret ?? string.Empty));
             //Tracing.Trace("keystring: '{0}'", keystring);
-            return new OAuthSignature
+            return new HMacSha1
             {
                 Key = Encoding.UTF8.GetBytes(keystring)
             };

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CopySDK.Helper;
+using CopySDK.Helpers;
 using CopySDK.HttpRequest;
 using CopySDK.Models;
 using Newtonsoft.Json;
@@ -69,7 +70,7 @@ namespace CopySDK
             };
 
             HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
-            string executeAsync = await httpRequestHandler.ExecuteAsync(httpRequestItem);
+            string executeAsync = await httpRequestHandler.ReadAsStringAsync(httpRequestItem);
 
             if (!string.IsNullOrEmpty(executeAsync))
             {
@@ -108,7 +109,7 @@ namespace CopySDK
             };
 
             HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
-            string executeAsync = await httpRequestHandler.ExecuteAsync(httpRequestItem);
+            string executeAsync = await httpRequestHandler.ReadAsStringAsync(httpRequestItem);
 
             string[] kvpairs = executeAsync.Split('&');
             Dictionary<string, string> parameters = kvpairs.Select(pair => pair.Split('='))

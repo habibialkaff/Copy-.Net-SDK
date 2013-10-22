@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using CopySDK.Helper;
+using CopySDK.Helpers;
 using CopySDK.HttpRequest;
 using CopySDK.Models;
 using System;
@@ -38,7 +39,7 @@ namespace CopySDK.Managers
             };
 
             HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
-            string executeAsync = await httpRequestHandler.ExecuteAsync(httpRequestItem);
+            string executeAsync = await httpRequestHandler.ReadAsStringAsync(httpRequestItem);
 
             return JsonConvert.DeserializeObject<User>(executeAsync);
         }
@@ -63,7 +64,7 @@ namespace CopySDK.Managers
             };
 
             HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
-            string executeAsync = await httpRequestHandler.ExecuteAsync(httpRequestItem);
+            string executeAsync = await httpRequestHandler.ReadAsStringAsync(httpRequestItem);
 
             //TODO : Investigate
             //return JsonConvert.DeserializeObject<User>(executeAsync);
