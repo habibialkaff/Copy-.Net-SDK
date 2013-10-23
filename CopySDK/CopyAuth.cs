@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace CopySDK
 {
-    public class CopyConfig : ICopyConfig
+    public class CopyAuth : ICopyAuth
     {
         public string CallbackURL { get; set; }
         public Config Config { get; set; }
@@ -32,7 +32,7 @@ namespace CopySDK
         //    };
         //}
 
-        public CopyConfig(string callbackURL, string consumerKey, string consumerSecret, Scope scope)
+        public CopyAuth(string callbackURL, string consumerKey, string consumerSecret, Scope scope)
         {
             CallbackURL = callbackURL;
             Scope = scope;

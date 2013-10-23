@@ -13,5 +13,7 @@ namespace CopySDK.Models
         public HttpContent HttpContent { get; set; }
 
         public bool IsDataRequest { get; set; }
+
+        public bool IsFileUpload { get; set; }
     }
 }

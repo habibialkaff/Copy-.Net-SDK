@@ -1,17 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{01E39A1A-9396-4586-936C-5E03093D1149}"
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{01E39A1A-9396-4586-936C-5E03093D1149}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopySDK.Samples.WP", "CopySDK.Samples.WP\CopySDK.Samples.WP.csproj", "{803E8124-7EC6-4E3E-8942-4D25E905E36B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopySDK.Samples.WP", "Samples\CopySDK.Samples.WP\CopySDK.Samples.WP.csproj", "{803E8124-7EC6-4E3E-8942-4D25E905E36B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopySDK", "CopySDK\CopySDK.csproj", "{C87C689A-510A-4820-BF1A-2E0DA19FCA38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{38940D0C-DF26-4D16-8AD0-44F375928A56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopySDK.Samples.Console", "Samples\CopySDK.Samples.Console\CopySDK.Samples.Console.csproj", "{38940D0C-DF26-4D16-8AD0-44F375928A56}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Temp", "Temp", "{00981BD9-E496-4008-8798-8F3962A1AC76}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyTemp", "CopyTemp\CopyTemp.csproj", "{211F6B68-57D2-4094-A315-E8C958CE7E1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{55EA0B39-8522-4EB9-989A-57C9CBB7A925}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

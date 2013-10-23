@@ -3,7 +3,7 @@ using CopySDK.Models;
 
 namespace CopySDK
 {
-    public interface ICopyConfig
+    public interface ICopyAuth
     {        
         Task<OAuthToken> GetRequestTokenAsync();
     }

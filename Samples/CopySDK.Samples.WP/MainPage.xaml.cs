@@ -21,7 +21,7 @@ namespace CopySDK.Samples.WP
     {
         private readonly IsolatedStorageSettings _appSettings = IsolatedStorageSettings.ApplicationSettings;
 
-        private CopyConfig copyConfig;
+        private CopyAuth copyConfig;
         private CopyClient copyClient;
         private OAuthToken authToken;
 
@@ -90,7 +90,7 @@ namespace CopySDK.Samples.WP
                     }
                 };
 
-                copyConfig = new CopyConfig("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
+                copyConfig = new CopyAuth("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
 
                 authToken = await copyConfig.GetRequestTokenAsync();
 

@@ -35,7 +35,7 @@ namespace CopySDK.HttpRequest
             return await httpResponse.Content.ReadAsByteArrayAsync();
         }
 
-        private async Task<HttpResponseMessage> ExecuteAsync(HttpRequestItem httpRequestItem)
+        public async Task<HttpResponseMessage> ExecuteAsync(HttpRequestItem httpRequestItem)
         {
             HttpRequestMessage httpRequest = new HttpRequestMessage()
                 {
@@ -50,6 +50,11 @@ namespace CopySDK.HttpRequest
             {
                 httpRequest.Headers.Add("X-Api-Version", "1");
                 httpRequest.Headers.Add("Accept", "application/json");
+            }
+
+            if (httpRequestItem.IsFileUpload)
+            {
+                httpRequest.Headers.Add("Content-Type", "multipart/form-data");
             }
 
             HttpResponseMessage httpResponse =
