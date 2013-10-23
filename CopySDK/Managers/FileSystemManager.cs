@@ -11,7 +11,7 @@ namespace CopySDK.Managers
     public interface IFileSystemManager
     {
         Task<FileSystem> GetInformationAsync(string id);
-        Task<byte[]> DownloadFile(string id);
+        Task<byte[]> DownloadFileAsync(string id);
     }
 
     public class FileSystemManager : IFileSystemManager
@@ -55,7 +55,7 @@ namespace CopySDK.Managers
             return null;
         }
 
-        public async Task<byte[]> DownloadFile(string id)
+        public async Task<byte[]> DownloadFileAsync(string id)
         {
             if (id != null)
             {
@@ -83,6 +83,6 @@ namespace CopySDK.Managers
                 return await httpRequestHandler.ReadAsByteArrayAsync(httpRequestItem);
             }
             return null;
-        }
+        }        
     }
 }
