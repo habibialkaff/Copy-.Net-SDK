@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using CopySDK.Helper;
 using CopySDK.Helpers;
 using CopySDK.HttpRequest;
@@ -19,7 +20,7 @@ namespace CopySDK.Managers
         public Config Config { get; set; }
         public OAuthToken AuthToken { get; set; }
 
-        private HttpRequestHandler _httpRequestHandler;
+        private readonly HttpRequestHandler _httpRequestHandler;
 
         public FileSystemManager(Config config, OAuthToken authToken)
         {
@@ -171,20 +172,27 @@ namespace CopySDK.Managers
             {
                 parentFolderId = parentFolderId.Replace("/copy/", "/files/");
 
-                string url = string.Format("{0}{1}?overwrite={3}", URL.RESTRoot, parentFolderId, overwriteFileWithTheSameName);
+                string url = string.Format("{0}{1}?overwrite={2}", URL.RESTRoot, parentFolderId, overwriteFileWithTheSameName);
 
                 HttpContent httpContent = new ByteArrayContent(newFile);
 
-                System.Net.Http.Headers.ContentDispositionHeaderValue contentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
-
-                contentDisposition.Name = "file";
-                contentDisposition.FileName = fileName;
+                ContentDispositionHeaderValue contentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "file",
+                    FileName = fileName
+                };
 
                 httpContent.Headers.ContentDisposition = contentDisposition;
 
-
                 HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Post, httpContent);
                 httpRequestItem.IsFileUpload = true;
+
+                HttpResponseMessage httpResponseMessage = await _httpRequestHandler.ExecuteAsync(httpRequestItem);
+
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
             }
 
             return result;

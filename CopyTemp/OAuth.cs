@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+using CopySDK.Authentication;
 
-namespace CopySDK.Authentication
+namespace CopyTemp
 {
     /// <summary>
     ///   A class to manage OAuth interactions.  This works with

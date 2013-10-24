@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{01E39A1A-9396-4586-936C-5E03093D1149}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopySDK.Samples.WP", "Samples\CopySDK.Samples.WP\CopySDK.Samples.WP.csproj", "{803E8124-7EC6-4E3E-8942-4D25E905E36B}"
@@ -21,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{55EA0B
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopySDK.Samples.MVC", "CopySDK.Samples.MVC\CopySDK.Samples.MVC.csproj", "{8E5A0345-80C1-452E-B31F-044F62CDF93D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +74,14 @@ Global
 		{211F6B68-57D2-4094-A315-E8C958CE7E1A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{211F6B68-57D2-4094-A315-E8C958CE7E1A}.Release|ARM.ActiveCfg = Release|Any CPU
 		{211F6B68-57D2-4094-A315-E8C958CE7E1A}.Release|x86.ActiveCfg = Release|Any CPU
+		{8E5A0345-80C1-452E-B31F-044F62CDF93D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E5A0345-80C1-452E-B31F-044F62CDF93D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E5A0345-80C1-452E-B31F-044F62CDF93D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8E5A0345-80C1-452E-B31F-044F62CDF93D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8E5A0345-80C1-452E-B31F-044F62CDF93D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E5A0345-80C1-452E-B31F-044F62CDF93D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E5A0345-80C1-452E-B31F-044F62CDF93D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8E5A0345-80C1-452E-B31F-044F62CDF93D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +89,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{803E8124-7EC6-4E3E-8942-4D25E905E36B} = {01E39A1A-9396-4586-936C-5E03093D1149}
 		{38940D0C-DF26-4D16-8AD0-44F375928A56} = {01E39A1A-9396-4586-936C-5E03093D1149}
+		{8E5A0345-80C1-452E-B31F-044F62CDF93D} = {01E39A1A-9396-4586-936C-5E03093D1149}
 		{211F6B68-57D2-4094-A315-E8C958CE7E1A} = {00981BD9-E496-4008-8798-8F3962A1AC76}
 	EndGlobalSection
 EndGlobal
