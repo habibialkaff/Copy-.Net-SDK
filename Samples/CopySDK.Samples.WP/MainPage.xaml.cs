@@ -92,7 +92,7 @@ namespace CopySDK.Samples.WP
 
                 copyConfig = new CopyAuth("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
 
-                authToken = await copyConfig.GetRequestTokenAsync();
+                await copyConfig.GetRequestTokenAsync();
 
                 Oauth.Visibility = Visibility.Visible;
                 AuthenticateBtn.Visibility = Visibility.Collapsed;

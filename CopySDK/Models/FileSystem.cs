@@ -28,8 +28,8 @@ namespace CopySDK.Models
         [JsonProperty(PropertyName = "children")]
         public FileSystem[] Children { get; set; }
 
-        [JsonProperty(PropertyName = "counts", NullValueHandling = NullValueHandling.Ignore)]
-        public Counts Counts { get; set; }
+        //[JsonProperty(PropertyName = "counts", NullValueHandling = NullValueHandling.Ignore)]
+        //public Counts Counts { get; set; }
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

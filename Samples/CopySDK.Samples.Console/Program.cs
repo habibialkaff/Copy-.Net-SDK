@@ -31,15 +31,15 @@ namespace ConsoleApplication1
                 }
             };
 
-            //CopyConfig copyConfig = new CopyConfig("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
+            CopyAuth copyConfig = new CopyAuth("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
 
-            //Task<OAuthToken> requestToken = copyConfig.GetRequestTokenAsync();
+            Task<OAuthToken> requestToken = copyConfig.GetRequestTokenAsync();
 
-            //Task.WhenAll(requestToken);
+            Task.WhenAll(requestToken);
 
-            //OAuthToken authToken = requestToken.Result;
+            OAuthToken authToken = requestToken.Result;
 
-            //var url = string.Format("{0}?oauth_token={1}", URL.Authorize, authToken.Token);
+            var url = string.Format("{0}?oauth_token={1}", URL.Authorize, authToken.Token);
 
             //System.Diagnostics.Process.Start(url);
 

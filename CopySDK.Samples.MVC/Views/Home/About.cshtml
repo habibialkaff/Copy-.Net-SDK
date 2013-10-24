@@ -32,3 +32,9 @@
         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
     </ul>
 </aside>
+
+@using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{ 
+    <input type="file" name="fileUpload" />
+    <input type="submit" name="Submit" id="Submit" value="Upload" />
+}

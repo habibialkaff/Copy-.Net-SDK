@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using CopySDK.Helper;
 using CopySDK.Helpers;
@@ -53,7 +54,7 @@ namespace CopySDK.Managers
 
             if (fileId != null)
             {
-                fileId = fileId.Replace("/copy/", "/files/");
+                fileId = fileId.Replace("/copy", "/files");
 
                 string url = string.Format("{0}{1}", URL.RESTRoot, fileId);
 
@@ -70,7 +71,7 @@ namespace CopySDK.Managers
 
             if (fileId != null)
             {
-                fileId = fileId.Replace("/copy/", "/thumbs/");
+                fileId = fileId.Replace("/copy", "/thumbs");
 
                 string url = string.Format("{0}{1}", URL.RESTRoot, fileId);
 
@@ -94,7 +95,7 @@ namespace CopySDK.Managers
 
             if (fileId != null)
             {
-                fileId = fileId.Replace("/copy/", "/files/");
+                fileId = fileId.Replace("/copy", "/files");
 
                 string url = string.Format("{0}{1}?name={2}&overwrite={3}", URL.RESTRoot, fileId, newFileName, overwriteFileWithTheSameName);
 
@@ -120,7 +121,7 @@ namespace CopySDK.Managers
 
             if (fileId != null && targetFileId != null)
             {
-                fileId = fileId.Replace("/copy/", "/files/");
+                fileId = fileId.Replace("/copy", "/files");
 
                 string url = string.Format("{0}{1}?path={2}&overwrite={3}", URL.RESTRoot, fileId, targetFileId, overwriteFileWithTheSameName);
 
@@ -145,7 +146,7 @@ namespace CopySDK.Managers
 
             if (parentFolderId != null)
             {
-                parentFolderId = parentFolderId.Replace("/copy/", "/files/");
+                parentFolderId = parentFolderId.Replace("/copy", "/files");
 
                 string url = string.Format("{0}{1}/{2}?overwrite={3}", URL.RESTRoot, parentFolderId, folderName, overwriteFolderWithTheSameName);
 
@@ -170,7 +171,7 @@ namespace CopySDK.Managers
 
             if (parentFolderId != null && !string.IsNullOrEmpty(fileName) && newFile.Length <= 1073741824)
             {
-                parentFolderId = parentFolderId.Replace("/copy/", "/files/");
+                parentFolderId = parentFolderId.Replace("/copy", "/files");
 
                 string url = string.Format("{0}{1}?overwrite={2}", URL.RESTRoot, parentFolderId, overwriteFileWithTheSameName);
 
@@ -182,9 +183,13 @@ namespace CopySDK.Managers
                     FileName = fileName
                 };
 
+                //httpContent.Headers.Add("Content-Type", "multipart/form-data");
                 httpContent.Headers.ContentDisposition = contentDisposition;
 
-                HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Post, httpContent);
+                MultipartFormDataContent formContent = new MultipartFormDataContent(new Random().Next(10000, 99999).ToString()) { httpContent };
+
+
+                HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Post, formContent);
                 httpRequestItem.IsFileUpload = true;
 
                 HttpResponseMessage httpResponseMessage = await _httpRequestHandler.ExecuteAsync(httpRequestItem);
@@ -211,7 +216,7 @@ namespace CopySDK.Managers
 
             if (id != null)
             {
-                id = id.Replace("/copy/", "/files/");
+                id = id.Replace("/copy", "/files");
 
                 string url = string.Format("{0}{1}", URL.RESTRoot, id);
 

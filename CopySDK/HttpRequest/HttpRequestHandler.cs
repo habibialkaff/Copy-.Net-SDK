@@ -43,7 +43,7 @@ namespace CopySDK.HttpRequest
                     Method = httpRequestItem.HttpMethod,
                     Content = httpRequestItem.HttpContent
                 };
-
+            
             httpRequest.Headers.Add("Authorization", httpRequestItem.AuthzHeader);
 
             if (httpRequestItem.IsDataRequest)
@@ -52,10 +52,10 @@ namespace CopySDK.HttpRequest
                 httpRequest.Headers.Add("Accept", "application/json");
             }
 
-            if (httpRequestItem.IsFileUpload)
-            {
-                httpRequest.Headers.Add("Content-Type", "multipart/form-data");
-            }
+            //if (httpRequestItem.IsFileUpload)
+            //{
+            //    httpRequest.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+            //}
 
             HttpResponseMessage httpResponse =
                 await _client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead);
