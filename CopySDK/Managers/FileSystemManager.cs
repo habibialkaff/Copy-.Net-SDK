@@ -12,7 +12,7 @@ namespace CopySDK.Managers
 {
     public interface IFileSystemManager
     {
-        Task<FileSystem> GetInformationAsync(string id);
+        Task<FileSystem> GetFileSystemInformationAsync(string id);
         Task<byte[]> DownloadFileAsync(string id);
     }
 
@@ -31,7 +31,7 @@ namespace CopySDK.Managers
             _httpRequestHandler = new HttpRequestHandler();
         }
 
-        public async Task<FileSystem> GetInformationAsync(string id)
+        public async Task<FileSystem> GetFileSystemInformationAsync(string id)
         {
             id = NormalizeId(id);
 
@@ -232,6 +232,23 @@ namespace CopySDK.Managers
 
             return result;
         }
+
+        public async Task<FileSystem> ListFileRevisionsAsync(string fileId)
+        {
+            fileId = NormalizeId(fileId);
+
+            if (fileId != null)
+            {
+                string url = string.Format("{0}/meta{1}/@activity", URL.RESTRoot, fileId);
+
+                HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Get);
+
+                string executeAsync = await _httpRequestHandler.ReadAsStringAsync(httpRequestItem);
+
+                return JsonConvert.DeserializeObject<FileSystem>(executeAsync);
+            }
+            return null;
+        }               
 
         private HttpRequestItem CreateHttpRequestItem(string url, HttpMethod httpMethod, HttpContent httpContent = null)
         {
