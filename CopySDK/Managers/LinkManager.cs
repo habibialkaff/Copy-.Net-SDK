@@ -53,6 +53,21 @@ namespace CopySDK.Managers
             return JsonConvert.DeserializeObject<Link[]>(executeAsync);
         }
 
+        public async Task<Link> CreateLink(LinkCreate newLink)
+        {
+            string url = string.Format("{0}/links", URL.RESTRoot);
+
+            string serializeObject = JsonConvert.SerializeObject(newLink);
+
+            HttpContent httpContent = new StringContent(serializeObject);
+
+            HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Post, httpContent);
+
+            string executeAsync = await _httpRequestHandler.ReadAsStringAsync(httpRequestItem);
+
+            return JsonConvert.DeserializeObject<Link>(executeAsync);
+        }
+
         private HttpRequestItem CreateHttpRequestItem(string url, HttpMethod httpMethod, HttpContent httpContent = null)
         {
             string authzHeader = AuthorizationHeader.CreateForREST(Config.ConsumerKey, Config.ConsumerSecret, AuthToken.Token, AuthToken.TokenSecret, url, httpMethod.ToString());
