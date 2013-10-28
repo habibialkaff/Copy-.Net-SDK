@@ -1,16 +1,6 @@
-﻿using System.Net.Http;
-using CopySDK.Helper;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using CopySDK.HttpRequest;
+﻿using System.Threading.Tasks;
 using CopySDK.Managers;
 using CopySDK.Models;
-using Newtonsoft.Json;
 
 namespace CopySDK
 {
@@ -21,6 +11,7 @@ namespace CopySDK
 
         public UserManager UserManager { get; set; }
         public FileSystemManager FileSystemManager { get; set; }
+        public LinkManager LinkManager { get; set; }
 
         public CopyClient(Config config, OAuthToken authToken)
         {
@@ -34,16 +25,17 @@ namespace CopySDK
         {
             UserManager = new UserManager(Config, AuthToken);
             FileSystemManager = new FileSystemManager(Config, AuthToken);
+            LinkManager = new LinkManager(Config, AuthToken);
         }
 
         public Task<FileSystem> GetRootFolder()
         {
-            return FileSystemManager.GetInformationAsync("/copy");
+            return FileSystemManager.GetFileSystemInformationAsync("/copy");
         }
 
         public Task<FileSystem> GetSharedFolder()
         {
-            return FileSystemManager.GetInformationAsync("/inbox");
+            return FileSystemManager.GetFileSystemInformationAsync("/inbox");
         } 
     }
 }

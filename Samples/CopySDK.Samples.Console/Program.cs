@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CopySDK;
-using CopySDK.Authentication;
 using CopySDK.Helper;
 using CopySDK.Models;
 using System.Net.Http;

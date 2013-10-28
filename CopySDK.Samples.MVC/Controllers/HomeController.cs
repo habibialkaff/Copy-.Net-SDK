@@ -47,9 +47,16 @@ namespace CopySDK.Samples.MVC.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public async Task<ActionResult> Contact()
         {
             ViewBag.Message = "Your contact page.";
+
+            CopyClient copyClient = (CopyClient)Session["copyClient"];
+
+            if (copyClient != null)
+            {
+                User user = await copyClient.UserManager.GetUserAsync();
+            }
 
             return View();
         }
