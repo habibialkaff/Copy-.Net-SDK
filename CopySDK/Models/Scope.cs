@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CopySDK
+namespace CopySDK.Models
 {
     public class Scope
     {

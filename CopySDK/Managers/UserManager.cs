@@ -12,7 +12,13 @@ using Newtonsoft.Json;
 
 namespace CopySDK.Managers
 {
-    public class UserManager
+    public interface IUserManager
+    {
+        Task<User> GetUserAsync();
+        Task UpdateUserAsync(UserUpdate userUpdate);
+    }
+
+    public class UserManager : IUserManager
     {
         public Config Config { get; set; }
         public OAuthToken AuthToken { get; set; }

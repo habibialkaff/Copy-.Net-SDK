@@ -29,7 +29,7 @@ namespace CopySDK.Samples.MVC.Controllers
 
             if (!string.IsNullOrEmpty(verifier))
             {
-                CopyAuth copyConfig = (CopyAuth) Session["copyConfig"];
+                Authentication.CopyAuth copyConfig = (Authentication.CopyAuth) Session["copyConfig"];
 
                 CopyClient copyClient = await copyConfig.GetAccessTokenAsync(verifier);
 
@@ -77,7 +77,7 @@ namespace CopySDK.Samples.MVC.Controllers
                 }
             };
 
-            CopyAuth copyConfig = new CopyAuth("http://localhost/CopyMVC/Home/About", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
+            Authentication.CopyAuth copyConfig = new Authentication.CopyAuth("http://localhost/CopyMVC/Home/About", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
 
             await copyConfig.GetRequestTokenAsync();
 

@@ -4,7 +4,13 @@ using CopySDK.Models;
 
 namespace CopySDK
 {
-    public class CopyClient
+    public interface ICopyClient
+    {
+        Task<FileSystem> GetRootFolder();
+        Task<FileSystem> GetSharedFolder();
+    }
+
+    public class CopyClient : ICopyClient
     {
         public Config Config { get; set; }
         public OAuthToken AuthToken { get; set; }

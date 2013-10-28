@@ -36,17 +36,16 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Authentication\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\CopyAuth.cs" />
+    <Compile Include="Authentication\ICopyAuth.cs" />
     <Compile Include="CopyClient.cs" />
-    <Compile Include="CopyAuth.cs" />
     <Compile Include="Helpers\AuthorizationHeader.cs" />
-	<Compile Include="Helpers\BooleanExtension.cs" />
-	<Compile Include="Helpers\UnixDateTimeConverter.cs" />
+    <Compile Include="Helpers\BooleanExtension.cs" />
+    <Compile Include="Helpers\UnixDateTimeConverter.cs" />
     <Compile Include="Helpers\URL.cs" />
     <Compile Include="HttpRequest\HttpRequestHandler.cs" />
-    <Compile Include="ICopyAuth.cs" />
     <Compile Include="Managers\LinkManager.cs" />
     <Compile Include="Managers\FileSystemManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
@@ -59,7 +58,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserEmail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scope.cs" />
+    <Compile Include="Models\Scope.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

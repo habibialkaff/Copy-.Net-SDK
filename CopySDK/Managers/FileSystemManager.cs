@@ -13,7 +13,15 @@ namespace CopySDK.Managers
     public interface IFileSystemManager
     {
         Task<FileSystem> GetFileSystemInformationAsync(string id);
-        Task<byte[]> DownloadFileAsync(string id);
+        Task<byte[]> DownloadFileAsync(string fileId);
+        Task<byte[]> DownloadThumbnailImageAsync(string fileId, int size);
+        Task<bool> RenameFileAsync(string fileId, string newFileName, bool overwriteFileWithTheSameName);
+        Task<bool> MoveFileAsync(string fileId, string newParentFolderId, string newFileName, bool overwriteFileWithTheSameName);
+        Task<bool> CreateNewFolderAsync(string parentFolderId, string folderName, bool overwriteFolderWithTheSameName);
+        Task<bool> UploadNewFileAsync(string parentFolderId, string fileName, byte[] newFile, bool overwriteFileWithTheSameName);
+        Task UpdateExistingFileAsync(string fileId, byte[] newFile);
+        Task<bool> DeleteAsync(string id);
+        Task<FileSystem> ListFileRevisionsAsync(string fileId);
     }
 
     public class FileSystemManager : IFileSystemManager

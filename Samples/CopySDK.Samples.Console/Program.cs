@@ -27,7 +27,7 @@ namespace ConsoleApplication1
                 }
             };
 
-            CopyAuth copyConfig = new CopyAuth("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
+            CopySDK.Authentication.CopyAuth copyConfig = new CopySDK.Authentication.CopyAuth("http://copysdk", "cIAKv1kFCwXn2izGsMl8vZmfpfBcJSv1", "vNY1oLTr2WieLYxgCA6tDgdfCS1zTRA2IMzhmQLoQOS7nmIK", scope);
 
             Task<OAuthToken> requestToken = copyConfig.GetRequestTokenAsync();
 

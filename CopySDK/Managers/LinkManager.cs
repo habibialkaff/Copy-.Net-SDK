@@ -12,7 +12,14 @@ using Newtonsoft.Json;
 
 namespace CopySDK.Managers
 {
-    public class LinkManager
+    public interface ILinkManager
+    {
+        Task<Link> GetLinkInformationAsync(string token);
+        Task<Link[]> GetAllLinksAsync();
+        Task<Link> CreateLink(LinkCreate newLink);
+    }
+
+    public class LinkManager : ILinkManager
     {
         public Config Config { get; set; }
         public OAuthToken AuthToken { get; set; }
