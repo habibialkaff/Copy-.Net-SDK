@@ -97,7 +97,7 @@ namespace CopySDK.Managers
             {
                 fileId = fileId.Replace("/copy", "/files");
 
-                string url = string.Format("{0}{1}?name={2}&overwrite={3}", URL.RESTRoot, fileId, newFileName, overwriteFileWithTheSameName);
+                string url = string.Format("{0}{1}?name={2}&overwrite={3}", URL.RESTRoot, fileId, newFileName, overwriteFileWithTheSameName.ToLowerString());
 
                 HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Put);
 
@@ -123,7 +123,7 @@ namespace CopySDK.Managers
             {
                 fileId = fileId.Replace("/copy", "/files");
 
-                string url = string.Format("{0}{1}?path={2}&overwrite={3}", URL.RESTRoot, fileId, targetFileId, overwriteFileWithTheSameName);
+                string url = string.Format("{0}{1}?path={2}&overwrite={3}", URL.RESTRoot, fileId, targetFileId, overwriteFileWithTheSameName.ToLowerString());
 
                 HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Put);
 
@@ -148,7 +148,7 @@ namespace CopySDK.Managers
             {
                 parentFolderId = parentFolderId.Replace("/copy", "/files");
 
-                string url = string.Format("{0}{1}/{2}?overwrite={3}", URL.RESTRoot, parentFolderId, folderName, overwriteFolderWithTheSameName);
+                string url = string.Format("{0}{1}/{2}?overwrite={3}", URL.RESTRoot, parentFolderId, folderName, overwriteFolderWithTheSameName.ToLowerString());
 
                 HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Post);
 
@@ -173,7 +173,7 @@ namespace CopySDK.Managers
             {
                 parentFolderId = parentFolderId.Replace("/copy", "/files");
 
-                string url = string.Format("{0}{1}?overwrite={2}", URL.RESTRoot, parentFolderId, overwriteFileWithTheSameName);
+                string url = string.Format("{0}{1}?overwrite={2}", URL.RESTRoot, parentFolderId, overwriteFileWithTheSameName.ToLowerString());
 
                 HttpContent httpContent = new ByteArrayContent(newFile);
 
@@ -182,11 +182,13 @@ namespace CopySDK.Managers
                     Name = "file",
                     FileName = fileName
                 };
-
-                //httpContent.Headers.Add("Content-Type", "multipart/form-data");
+                
                 httpContent.Headers.ContentDisposition = contentDisposition;
 
-                MultipartFormDataContent formContent = new MultipartFormDataContent(new Random().Next(10000, 99999).ToString()) { httpContent };
+                MultipartFormDataContent formContent = new MultipartFormDataContent(new Random().Next(10000, 99999).ToString()) 
+                { 
+                    httpContent 
+                };
 
 
                 HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Post, formContent);

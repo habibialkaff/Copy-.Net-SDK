@@ -42,6 +42,7 @@
     <Compile Include="CopyClient.cs" />
     <Compile Include="CopyAuth.cs" />
     <Compile Include="Helpers\AuthorizationHeader.cs" />
+    <Compile Include="Helpers\BooleanExtension.cs" />
     <Compile Include="Helpers\URL.cs" />
     <Compile Include="HttpRequest\HttpRequestHandler.cs" />
     <Compile Include="ICopyAuth.cs" />
