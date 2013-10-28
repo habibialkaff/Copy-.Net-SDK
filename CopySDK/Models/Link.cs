@@ -64,4 +64,13 @@ namespace CopySDK.Models
         [JsonProperty(PropertyName = "paths", NullValueHandling = NullValueHandling.Ignore)]
         public string[] Paths { get; set; }
     }
+
+    public class LinkUpdate : LinkCreate
+    {
+        [JsonProperty(PropertyName = "token")]
+        public string Token { get; set; }
+
+        [JsonProperty(PropertyName = "recipients", NullValueHandling = NullValueHandling.Ignore)]
+        public User[] Recipients { get; set; }
+    }
 }

@@ -16,7 +16,7 @@ namespace CopySDK.Managers
     {
         Task<Link> GetLinkInformationAsync(string token);
         Task<Link[]> GetAllLinksAsync();
-        Task<Link> CreateLink(LinkCreate newLink);
+        Task<Link> CreateLinkAsync(LinkCreate newLink);
     }
 
     public class LinkManager : ILinkManager
@@ -60,7 +60,7 @@ namespace CopySDK.Managers
             return JsonConvert.DeserializeObject<Link[]>(executeAsync);
         }
 
-        public async Task<Link> CreateLink(LinkCreate newLink)
+        public async Task<Link> CreateLinkAsync(LinkCreate newLink)
         {
             string url = string.Format("{0}/links", URL.RESTRoot);
 
@@ -73,6 +73,49 @@ namespace CopySDK.Managers
             string executeAsync = await _httpRequestHandler.ReadAsStringAsync(httpRequestItem);
 
             return JsonConvert.DeserializeObject<Link>(executeAsync);
+        }
+
+        public async Task<bool> UpdateLinkAsync(LinkUpdate updatedLink)
+        {
+            bool result = false;
+
+            string url = string.Format("{0}/links/{1}", URL.RESTRoot, updatedLink.Token);
+
+            string serializeObject = JsonConvert.SerializeObject(updatedLink);
+
+            HttpContent httpContent = new StringContent(serializeObject);
+
+            HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Put, httpContent);
+
+            HttpResponseMessage httpResponseMessage = await _httpRequestHandler.ExecuteAsync(httpRequestItem);
+
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        public async Task<bool> DeleteLinkAsync(string token)
+        {
+            bool result = false;
+
+            if (token != null)
+            {
+                string url = string.Format("{0}/links/{1}", URL.RESTRoot, token);
+
+                HttpRequestItem httpRequestItem = CreateHttpRequestItem(url, HttpMethod.Delete);
+
+                HttpResponseMessage httpResponseMessage = await _httpRequestHandler.ExecuteAsync(httpRequestItem);
+
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    result = true;
+                }
+            }
+
+            return result;
         }
 
         private HttpRequestItem CreateHttpRequestItem(string url, HttpMethod httpMethod, HttpContent httpContent = null)
